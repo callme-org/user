@@ -14,7 +14,7 @@ class DatabaseRepositoryImpl : DatabaseRepository {
         val name = System.getenv(DATABASE_NAME)
 
         Database.connect(
-            url = "jdbc:mysql://$host:$port/$name",
+            url = "jdbc:mysql://$host:$port/$name$JDBC_PARAMS",
             user = System.getenv(DATABASE_USERNAME),
             password = System.getenv(DATABASE_PASSWORD),
             driver = DB_DRIVER_NAME
@@ -32,6 +32,8 @@ class DatabaseRepositoryImpl : DatabaseRepository {
         private const val DATABASE_PORT = "DATABASE_PORT"
         private const val DATABASE_USERNAME = "DATABASE_USERNAME"
         private const val DATABASE_PASSWORD = "DATABASE_PASSWORD"
+
+        private const val JDBC_PARAMS = "?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true"
 
         private const val DB_DRIVER_NAME = "com.mysql.cj.jdbc.Driver"
     }
