@@ -2,6 +2,8 @@
 core-ktor = "2.3.10"
 core-kotlin = "1.9.23"
 
+netty-logback = "1.5.6"
+
 db-exposed = "0.49.0"
 db-mysql-connector = "8.0.33"
 
@@ -19,6 +21,9 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm" }
 db-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "db-exposed" }
 db-exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "db-exposed" }
 db-mysql-connector = { module = "mysql:mysql-connector-java", version.ref = "db-mysql-connector" }
+
+#netty
+netty-logback = { module = "ch.qos.logback:logback-classic", version.ref = "netty-logback" }
 
 #koin
 koin = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
