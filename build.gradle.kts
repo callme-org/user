@@ -39,5 +39,7 @@ dependencies {
     implementation(libs.db.exposed.jdbc)
     implementation(libs.db.mysql.connector)
 
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+
     implementation(libs.koin)
 }
