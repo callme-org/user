@@ -4,7 +4,7 @@ WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
 FROM openjdk:21
-EXPOSE 81:8081
+EXPOSE 8081:8081
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/callme-user.jar
 ENTRYPOINT ["java","-jar","/app/callme-user.jar"]
