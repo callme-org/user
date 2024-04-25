@@ -5,10 +5,12 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting(){
     routing {
-        route("/user"){
-            create()
-            get()
-            update()
+        route("/common") {
+            route("/user") {
+                create()
+                get()
+                update()
+            }
         }
     }
 }
