@@ -9,4 +9,8 @@ object UserTable : Table() {
     val username = varchar("username", 128).nullable()
 
     override val primaryKey = PrimaryKey(id)
+
+    init {
+        uniqueIndex(login)
+    }
 }
