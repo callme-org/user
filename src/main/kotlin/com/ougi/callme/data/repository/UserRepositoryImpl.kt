@@ -18,15 +18,6 @@ class UserRepositoryImpl : UserRepository {
             UserTable.selectAll()
                 .where { UserTable.login eq user.login }
                 .singleOrNull()
-                ?.let { result ->
-                    update(
-                        UpdateUserDto(
-                            login = user.login,
-                            username = result[UserTable.username],
-                            newLogin = null,
-                        )
-                    )
-                }
                 ?: UserTable.insertIgnore { column ->
                     column[UserTable.login] = user.login
                     column[UserTable.username] = username
