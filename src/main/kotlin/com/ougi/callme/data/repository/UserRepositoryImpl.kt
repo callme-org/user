@@ -6,7 +6,7 @@ import com.ougi.callme.data.model.dto.UpdateUserDto
 import com.ougi.callme.data.model.table.UserTable
 import com.ougi.callme.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.update
@@ -14,9 +14,16 @@ import org.jetbrains.exposed.sql.update
 class UserRepositoryImpl : UserRepository {
 
     override suspend fun create(user: CreateUserDto) = dbQuery {
-        UserTable.insert { column ->
-            column[login] = user.login
-        }[UserTable.id]
+        UserTable.selectAll()
+            .where { UserTable.login eq user.login }
+            .map { result -> result[UserTable.username] }
+            .singleOrNull()
+            .let { username ->
+                UserTable.insertIgnore { column ->
+                    column[UserTable.login] = user.login
+                    column[UserTable.username] = username
+                }[UserTable.id]
+            }
     }
 
     override suspend fun read(login: String): SelectUserDto? = dbQuery {
