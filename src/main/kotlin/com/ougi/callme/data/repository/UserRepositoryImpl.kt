@@ -13,17 +13,25 @@ import org.jetbrains.exposed.sql.update
 
 class UserRepositoryImpl : UserRepository {
 
-    override suspend fun create(user: CreateUserDto) = dbQuery {
-        UserTable.selectAll()
-            .where { UserTable.login eq user.login }
-            .map { result -> result[UserTable.username] }
-            .singleOrNull()
-            .let { username ->
-                UserTable.insertIgnore { column ->
+    override suspend fun create(user: CreateUserDto) {
+        dbQuery {
+            UserTable.selectAll()
+                .where { UserTable.login eq user.login }
+                .singleOrNull()
+                ?.let { result ->
+                    update(
+                        UpdateUserDto(
+                            login = user.login,
+                            username = result[UserTable.username],
+                            newLogin = null,
+                        )
+                    )
+                }
+                ?: UserTable.insertIgnore { column ->
                     column[UserTable.login] = user.login
                     column[UserTable.username] = username
                 }[UserTable.id]
-            }
+        }
     }
 
     override suspend fun read(login: String): SelectUserDto? = dbQuery {
@@ -31,7 +39,6 @@ class UserRepositoryImpl : UserRepository {
             .where { UserTable.login eq login }
             .map { result ->
                 SelectUserDto(
-                    id = result[UserTable.id],
                     login = result[UserTable.login],
                     username = result[UserTable.username]
                 )
@@ -39,10 +46,12 @@ class UserRepositoryImpl : UserRepository {
             .singleOrNull()
     }
 
-    override suspend fun update(updatedUser: UpdateUserDto) = dbQuery {
-        UserTable.update({ UserTable.id eq updatedUser.id }) { column ->
-            updatedUser.login?.let { newLogin -> column[login] = newLogin }
-            updatedUser.username?.let { newUsername -> column[username] = newUsername }
+    override suspend fun update(updatedUser: UpdateUserDto) {
+        dbQuery {
+            UserTable.update({ UserTable.login eq updatedUser.login }) { column ->
+                updatedUser.newLogin?.let { newLogin -> column[login] = newLogin }
+                updatedUser.username?.let { newUsername -> column[username] = newUsername }
+            }
         }
     }
 

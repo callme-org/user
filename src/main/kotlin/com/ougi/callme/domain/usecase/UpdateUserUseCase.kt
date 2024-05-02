@@ -19,8 +19,8 @@ class UpdateUserUseCaseImpl(
             ?.run {
                 userRepository.update(
                     UpdateUserDto(
-                        id = id,
-                        login = user.newLogin ?: login,
+                        login = login,
+                        newLogin = user.newLogin,
                         username = user.username ?: username,
                     )
                 )

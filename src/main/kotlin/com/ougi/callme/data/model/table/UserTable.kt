@@ -1,13 +1,10 @@
 package com.ougi.callme.data.model.table
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 
-object UserTable : Table() {
+object UserTable : IntIdTable("users") {
 
-    val id = integer("id").autoIncrement()
     val login = varchar("login", 128).uniqueIndex()
     val username = varchar("username", 128).nullable()
-
-    override val primaryKey = PrimaryKey(id)
 
 }
